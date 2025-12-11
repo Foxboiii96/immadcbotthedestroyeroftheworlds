@@ -29,11 +29,19 @@ class MistralAgentBot(discord.Client):
 
                     current_msg_content = f"{message.author.name}: {message.content}"
 
+                    # Check for image attachments
+                    image_url = None
+                    if message.attachments:
+                        attachment = message.attachments[0]
+                        if attachment.content_type.startswith('image/'):
+                            image_url = attachment.url
+
                     # Delegate processing to the agent service
                     final_response = await agent_service.process_message(
                         current_msg_content,
                         recent_chunk,
-                        old_chunk
+                        old_chunk,
+                        image_url
                     )
 
                     response_message = await message.reply(final_response)
