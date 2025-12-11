@@ -6,8 +6,6 @@ import asyncio
 class MemoryService:
     def __init__(self):
         self.pool = None
-        # Run async initialization in the event loop
-        asyncio.create_task(self.init_pool_and_db())
 
     async def init_pool_and_db(self):
         """Initializes the connection pool and the database table."""
