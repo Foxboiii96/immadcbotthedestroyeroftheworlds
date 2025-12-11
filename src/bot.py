@@ -7,8 +7,8 @@ from src.agents.consciousness import agent_consciousness_generate_thought
 
 class MistralAgentBot(discord.Client):
     async def on_ready(self):
-        print(f'Bejelentkezve mint: {self.user} (ID: {self.user.id})')
-        print('A Világok Pusztítója készen áll. 💀')
+        print(f'Logged in as: {self.user} (ID: {self.user.id})')
+        print('Entity is online. 💀')
         if not self.heartbeat_task.is_running():
             self.heartbeat_task.start()
 
@@ -19,9 +19,9 @@ class MistralAgentBot(discord.Client):
             thought = await agent_consciousness_generate_thought()
             await self.change_presence(activity=discord.Game(name=thought))
         except Exception as e:
-            print(f"Hiba a szívverés során: {e}")
+            print(f"Error during heartbeat: {e}")
             # Fallback status in case of an error
-            await self.change_presence(activity=discord.Game(name="A kozmoszt kémleli..."))
+            await self.change_presence(activity=discord.Game(name="Scanning cosmos..."))
 
     @heartbeat_task.before_loop
     async def before_heartbeat_task(self):
@@ -66,5 +66,5 @@ class MistralAgentBot(discord.Client):
                     )
 
                 except Exception as e:
-                    print(f"Hiba történt a kozmikus mátrixban: {e}")
-                    await message.channel.send("Jaj, valami fura energia van a rendszerben! ✨ Bocsii, próbáld újra légyszi! 💖")
+                    print(f"Error in cosmic matrix: {e}")
+                    await message.channel.send("System anomaly detected. Please try again.")
