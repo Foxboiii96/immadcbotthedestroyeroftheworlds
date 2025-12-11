@@ -22,7 +22,7 @@ def get_responder_prompt(context_summary, strategy, recent_log, current_message,
 
     memory_section = ""
     if long_term_memories:
-        memory_list = "\\n".join(f"- {m}" for m in long_term_memories)
+        memory_list = "\n".join(f"- {m}" for m in long_term_memories)
         memory_section = f"Here are some things you remember about this:\n{memory_list}\n"
 
     return f"""---

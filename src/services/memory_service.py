@@ -39,7 +39,7 @@ class MemoryService:
         async with self.pool.acquire() as conn:
             await conn.execute("INSERT INTO memories (content) VALUES ($1);", text)
 
-    async def retrieve_relevant_memories(self, query_text: str, limit: int = 5):
+    async def retrieve_relevant_memories(self, query_text: str, limit: int = 6):
         """Retrieves memories relevant to the query text asynchronously."""
         if not self.pool: return []
 
