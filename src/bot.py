@@ -67,4 +67,4 @@ class MistralAgentBot(discord.Client):
 
                 except Exception as e:
                     print(f"Hiba történt a kozmikus mátrixban: {e}")
-                    await message.channel.send("Hmph. A rendszerem egy pillanatra megzavarodott. Próbáld újra, halandó.")
+                    await message.channel.send("Jaj, valami fura energia van a rendszerben! ✨ Bocsii, próbáld újra légyszi! 💖")
