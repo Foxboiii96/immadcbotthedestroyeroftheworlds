@@ -1,21 +1,11 @@
 # src/bot.py
 import discord
 from discord.ext import tasks
-import itertools
 from src.services.history_service import history_service
 from src.services.agent_service import agent_service
+from src.agents.consciousness import agent_consciousness_generate_thought
 
 class MistralAgentBot(discord.Client):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.statuses = itertools.cycle([
-            "Halandókat figyel...",
-            "Kozmikus igazságokat dolgoz fel...",
-            "A következő lépést tervezi...",
-            "A valóság szövetét vizsgálja...",
-            "Trilliókat számol..."
-        ])
-
     async def on_ready(self):
         print(f'Bejelentkezve mint: {self.user} (ID: {self.user.id})')
         print('A Világok Pusztítója készen áll. 💀')
@@ -24,9 +14,14 @@ class MistralAgentBot(discord.Client):
 
     @tasks.loop(minutes=1)
     async def heartbeat_task(self):
-        """Cycles through statuses to create a 'heartbeat'."""
-        status = next(self.statuses)
-        await self.change_presence(activity=discord.Game(name=status))
+        """Generates a thought from the consciousness agent and sets it as status."""
+        try:
+            thought = await agent_consciousness_generate_thought()
+            await self.change_presence(activity=discord.Game(name=thought))
+        except Exception as e:
+            print(f"Hiba a szívverés során: {e}")
+            # Fallback status in case of an error
+            await self.change_presence(activity=discord.Game(name="A kozmoszt kémleli..."))
 
     @heartbeat_task.before_loop
     async def before_heartbeat_task(self):
@@ -34,18 +29,15 @@ class MistralAgentBot(discord.Client):
         await self.wait_until_ready()
 
     async def on_message(self, message):
-        # Ignore messages from the bot itself
         if message.author == self.user:
             return
 
-        # Add message to history
         history_service.add_to_history(
             message.channel.id,
             message.author.name,
             message.content
         )
 
-        # Only respond if mentioned or in a DM
         if self.user.mentioned_in(message) or isinstance(message.channel, discord.DMChannel):
             async with message.channel.typing():
                 try:
