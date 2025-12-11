@@ -1,17 +1,12 @@
-from src.utils.mistral_client import mistral_client
+# src/agents/strategist.py
+from src.services.mistral_client import mistral_client
+from src.agents.prompts import get_strategist_prompt
 
 async def agent_strategist_analyze(current_message, context_summary):
     """
-    Feladata: Eldönteni, mi a felhasználó szándéka az összefoglaló és az új üzenet alapján.
-    Instrukciókat ad a Válaszadónak.
+    Analyzes the user's intent and provides a strategy.
     """
-    prompt = (
-        f"Te egy Stratégiai Elemző Ágens vagy. \n"
-        f"Kontextus (előzmények): {context_summary}\n"
-        f"Aktuális üzenet: {current_message}\n\n"
-        f"Határozd meg, mi a felhasználó célja, és adj egy rövid utasítást a válaszadó botnak, "
-        f"hogy hogyan reagáljon stílusban és tartalomban. (Pl: 'A felhasználó dühös, nyugtasd meg', 'Kódot kér, adj példát')."
-    )
+    prompt = get_strategist_prompt(current_message, context_summary)
 
     response = await mistral_client.chat.complete_async(
         model="mistral-small-latest",
