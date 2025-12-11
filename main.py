@@ -6,7 +6,7 @@ from src.config import DISCORD_TOKEN, MISTRAL_API_KEY
 def main():
     """Initializes and runs the Discord bot."""
     if not DISCORD_TOKEN or not MISTRAL_API_KEY:
-        print("FATAL ERROR: Hiányzó API kulcsok a .env fájlban! A Világok Pusztítója nem tud felébredni.")
+        print("FATAL ERROR: Missing API keys in the .env file! The entity cannot awaken.")
         return
 
     intents = discord.Intents.default()
